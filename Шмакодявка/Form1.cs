@@ -51,7 +51,7 @@ namespace Shmak
             XUP = 0x00000100
         }
 
-        private class Px {
+        public class Px {
             public Color color;
             public int x;
             public int y;
@@ -63,15 +63,20 @@ namespace Shmak
             }
         }
 
+        private Thread draw_thread;
+
         private void button1_Click(object sender, EventArgs e)
         {
+ 
             switch (Settings.Default.draft_mode)
             {
                 case 0:
-                    draw_full_line();
+                    draw_thread = new Thread(new ThreadStart(draw_full_line));
+                    draw_thread.Start();
                     break;
                 case 1:
-                    draw_full_rand();
+                    draw_thread = new Thread(new ThreadStart(draw_full_rand));
+                    draw_thread.Start();
                     break;
             }
 
@@ -82,7 +87,8 @@ namespace Shmak
             switch (Settings.Default.draft_mode)
             {
                 case 0:
-                    draw_chunk();
+                    draw_thread = new Thread(new ThreadStart(draw_chunk));
+                    draw_thread.Start();
                     break;
                 case 1:
                     Random rand = new Random();
@@ -93,7 +99,8 @@ namespace Shmak
                         ChunksPix[j] = ChunksPix[i];
                         ChunksPix[i] = temp;
                     }
-                    draw_chunk();
+                    draw_thread = new Thread(new ThreadStart(draw_chunk));
+                    draw_thread.Start();
                     break;
             }
         }
@@ -240,6 +247,12 @@ namespace Shmak
             fd.ShowDialog();
             void dialog_ok(object dsndr, CancelEventArgs de)
             {
+                Bitmap i = (Bitmap)Image.FromFile(Settings.Default.image_path = fd.FileName);
+                if (i.Size.Width > 512 || i.Size.Height > 512)
+                {
+                    MessageBox.Show("Картинка должна быть размером не больше 512x512px", "Error");
+                    return;
+                }
                 Settings.Default.image_path = fd.FileName;
                 Settings.Default.Save();
                 update_GUI();
@@ -252,6 +265,12 @@ namespace Shmak
             if (!(double.TryParse(textBox3.Text, out num))) { return; }
             Settings.Default.sensitivity = num;
             Settings.Default.Save();
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            prev pr = new prev((Bitmap)Image.FromFile(Settings.Default.image_path));
+            pr.Show();
         }
     }
 }
