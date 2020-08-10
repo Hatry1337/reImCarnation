@@ -49,13 +49,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Drafters\ChunkedDrafter.cs" />
+    <Compile Include="Drafters\Drafter.cs" />
+    <Compile Include="Drafters\LineDrafter.cs" />
+    <Compile Include="Drafters\RandomDrafter.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="OldShit.cs" />
+    <Compile Include="Drafters\OptimizedDrafter.cs" />
     <Compile Include="prev.cs">
       <SubType>Form</SubType>
     </Compile>

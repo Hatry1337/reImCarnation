@@ -66,5 +66,6 @@ namespace Shmak
             Settings.Default.Save();
             update_gui();
         }
+
     }
 }

@@ -35,6 +35,7 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.button5 = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.button4 = new System.Windows.Forms.Button();
@@ -44,7 +45,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.button5 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -120,6 +120,16 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Settings";
             // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(185, 159);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(80, 20);
+            this.button5.TabIndex = 10;
+            this.button5.Text = "preview";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -187,7 +197,11 @@
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Items.AddRange(new object[] {
             "Line Mode",
-            "Random Mode"});
+            "Random Mode",
+            "Optimized Mode Horizontal",
+            "Optimized Mode Vertical",
+            "[unstable] Optimized 2D",
+            "[unstable] Optimized 4D"});
             this.comboBox1.Location = new System.Drawing.Point(6, 41);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(173, 21);
@@ -202,16 +216,6 @@
             this.textBox1.Size = new System.Drawing.Size(173, 20);
             this.textBox1.TabIndex = 0;
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
-            // 
-            // button5
-            // 
-            this.button5.Location = new System.Drawing.Point(185, 159);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(80, 20);
-            this.button5.TabIndex = 10;
-            this.button5.Text = "preview";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // Form1
             // 

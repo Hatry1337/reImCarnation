@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Shmak.Drafters;
 using Shmak.Properties;
 
 namespace Shmak
@@ -31,197 +32,89 @@ namespace Shmak
             textBox3.Text = Settings.Default.sensitivity.ToString();
         }
 
-        [DllImport("user32.dll")]
-        static extern void mouse_event(uint dwFlags, int dx, int dy, uint dwData,
-        int dwExtraInfo);
-
-        [Flags]
-        public enum MouseEventFlags : uint
-        {
-            LEFTDOWN = 0x00000002,
-            LEFTUP = 0x00000004,
-            MIDDLEDOWN = 0x00000020,
-            MIDDLEUP = 0x00000040,
-            MOVE = 0x00000001,
-            ABSOLUTE = 0x00008000,
-            RIGHTDOWN = 0x00000008,
-            RIGHTUP = 0x00000010,
-            WHEEL = 0x00000800,
-            XDOWN = 0x00000080,
-            XUP = 0x00000100
-        }
-
-        public class Px {
-            public Color color;
-            public int x;
-            public int y;
-            public Px(int x, int y, Color color)
-            {
-                this.x = x;
-                this.y = y;
-                this.color = color;
-            }
-        }
-
-        private Thread draw_thread;
+        private Thread DrawThread;
 
         private void button1_Click(object sender, EventArgs e)
         {
- 
+            Drafter drafter;
             switch (Settings.Default.draft_mode)
             {
                 case 0:
-                    draw_thread = new Thread(new ThreadStart(draw_full_line));
-                    draw_thread.Start();
+                    drafter = new LineDrafter();
+                    DrawThread = new Thread(new ThreadStart(drafter.Draw));
+                    DrawThread.Start();
                     break;
                 case 1:
-                    draw_thread = new Thread(new ThreadStart(draw_full_rand));
-                    draw_thread.Start();
+                    drafter = new RandomDrafter();
+                    DrawThread = new Thread(new ThreadStart(drafter.Draw));
+                    DrawThread.Start();
+                    break;
+                case 2:
+                    drafter = new OptimizedDrafter(1);
+                    DrawThread = new Thread(new ThreadStart(drafter.Draw));
+                    DrawThread.Start();
+                    break;
+                case 3:
+                    drafter = new OptimizedDrafter(2);
+                    DrawThread = new Thread(new ThreadStart(drafter.Draw));
+                    DrawThread.Start();
+                    break;
+                case 4:
+                    drafter = new OptimizedDrafter(3);
+                    DrawThread = new Thread(new ThreadStart(drafter.Draw));
+                    DrawThread.Start();
+                    break;
+                case 5:
+                    drafter = new OptimizedDrafter(4);
+                    DrawThread = new Thread(new ThreadStart(drafter.Draw));
+                    DrawThread.Start();
                     break;
             }
 
         }
+
+        private ChunkedDrafter chunkedDrafter;
 
         private void button3_Click(object sender, EventArgs e)
         {
             switch (Settings.Default.draft_mode)
             {
                 case 0:
-                    draw_thread = new Thread(new ThreadStart(draw_chunk));
-                    draw_thread.Start();
+                    if(!(chunkedDrafter == null))
+                    {
+                        chunkedDrafter.Mode = 0;
+                        DrawThread = new Thread(new ThreadStart(chunkedDrafter.Draw));
+                        DrawThread.Start();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Сперва нужно откалибровать курсор!", "Error");
+                    }
                     break;
+
                 case 1:
-                    Random rand = new Random();
-                    for (int i = ChunksPix.Count - 1; i >= 1; i--)
+                    if (!(chunkedDrafter == null))
                     {
-                        int j = rand.Next(i + 1);
-                        var temp = ChunksPix[j];
-                        ChunksPix[j] = ChunksPix[i];
-                        ChunksPix[i] = temp;
+                        chunkedDrafter.Mode = 1;
+                        DrawThread = new Thread(new ThreadStart(chunkedDrafter.Draw));
+                        DrawThread.Start();
                     }
-                    draw_thread = new Thread(new ThreadStart(draw_chunk));
-                    draw_thread.Start();
+                    else
+                    {
+                        MessageBox.Show("Сперва нужно откалибровать курсор!", "Error");
+                    }
+                    break;
+                default:
+                    MessageBox.Show("Отрисовка чанками поддерживается только в режимах Line Mode и Random Mode!", "Error");
                     break;
             }
         }
-
-
-        private void draw_chunk()
-        {
-            int lng = 500;
-            if (ChunksPix.Count < 500)
-            {
-                lng = ChunksPix.Count;
-            }
-
-            for (int i = 0; i < lng; i++)
-            {
-                Px px = ChunksPix[i];
-                ChunksPix.RemoveAt(i);
-                Cursor.Position = new Point(ChunkCur.X + px.x, ChunkCur.Y + px.y);
-                mouse_event((int)(MouseEventFlags.LEFTDOWN), 0, 0, 0, 0);
-                mouse_event((int)(MouseEventFlags.LEFTUP), 0, 0, 0, 0);
-                Thread.Sleep(20);
-            }
-        }
-
-        private void draw_full_line()
-        {
-            if (!(File.Exists(Settings.Default.image_path))) { MessageBox.Show("Файл картинки не найден! (неверно указан путь или файл был удалён)", "Error");return; }
-            Bitmap img = (Bitmap)Image.FromFile(Settings.Default.image_path);
-            Thread.Sleep(5000);
-
-            Point st_pos = Cursor.Position;
-            List<Px> pixels = new List<Px>();
-
-            for (int y = 0; y < img.Height; y++)
-            {
-                for (int x = 0; x < img.Width; x++)
-                {
-                    Color clr = img.GetPixel(x, y);
-                    if (clr.GetBrightness() < Settings.Default.sensitivity)
-                    {
-                        pixels.Add(new Px(x, y, clr));
-                    }
-                }
-            }
-
-            for (int i = 0; i < pixels.Count; i++)
-            {
-                Px px = pixels[i];
-                Cursor.Position = new Point(st_pos.X + px.x, st_pos.Y + px.y);
-                mouse_event((int)(MouseEventFlags.LEFTDOWN), 0, 0, 0, 0);
-                mouse_event((int)(MouseEventFlags.LEFTUP), 0, 0, 0, 0);
-                Thread.Sleep(Settings.Default.wait_delay);
-            }
-        }
-
-        private void draw_full_rand()
-        {
-            if (!(File.Exists(Settings.Default.image_path))) { MessageBox.Show("Файл картинки не найден! (неверно указан путь или файл был удалён)", "Error"); return; }
-            Bitmap img = (Bitmap)Image.FromFile(Settings.Default.image_path);
-            Thread.Sleep(5000);
-
-            Point st_pos = Cursor.Position;
-            List<Px> pixels = new List<Px>();
-
-            for (int y = 0; y < img.Height; y++)
-            {
-                for (int x = 0; x < img.Width; x++)
-                {
-                    Color clr = img.GetPixel(x, y);
-                    if (clr.GetBrightness() < Settings.Default.sensitivity)
-                    {
-                        pixels.Add(new Px(x, y, clr));
-                    }
-                }
-            }
-
-            Random rand = new Random();
-            for (int i = pixels.Count - 1; i >= 1; i--)
-            {
-                int j = rand.Next(i + 1);
-                var temp = pixels[j];
-                pixels[j] = pixels[i];
-                pixels[i] = temp;
-            }
-
-            for (int i = 0; i < pixels.Count; i++)
-            {
-                Px px = pixels[i];
-                Cursor.Position = new Point(st_pos.X + px.x, st_pos.Y + px.y);
-                mouse_event((int)(MouseEventFlags.LEFTDOWN), 0, 0, 0, 0);
-                mouse_event((int)(MouseEventFlags.LEFTUP), 0, 0, 0, 0);
-                Thread.Sleep(Settings.Default.wait_delay);
-            }
-        }
-
-
-        private List<Px> ChunksPix;
-        private Point ChunkCur;
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (!(File.Exists(Settings.Default.image_path))) { MessageBox.Show("Файл картинки не найден! (неверно указан путь или файл был удалён)", "Error"); return; }
-            Bitmap img = (Bitmap)Image.FromFile(Settings.Default.image_path);
-            Thread.Sleep(5000);
-
-            ChunkCur = Cursor.Position;
-            ChunksPix = new List<Px>();
-
-            for (int y = 0; y < img.Height; y++)
-            {
-                for (int x = 0; x < img.Width; x++)
-                {
-                    Color clr = img.GetPixel(x, y);
-                    if (clr.GetBrightness() < Settings.Default.sensitivity)
-                    {
-                        ChunksPix.Add(new Px(x, y, clr));
-                    }
-                }
-            }
-
-            SystemSounds.Asterisk.Play();
+            chunkedDrafter = new ChunkedDrafter(0);
+            DrawThread = new Thread(new ThreadStart(chunkedDrafter.Collibrate));
+            DrawThread.Start();
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
