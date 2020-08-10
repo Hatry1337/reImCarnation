@@ -14,10 +14,11 @@ namespace Shmak
     public partial class prev : Form
     {
         public Bitmap image;
-        public Bitmap wh_bit = new Bitmap(512, 512);
+        public Bitmap wh_bit;
         public prev(Bitmap image)
         {
             this.image = image;
+            wh_bit = new Bitmap(image.Width, image.Height);
             for (int y = 0; y < this.wh_bit.Height; y++)
             {
                 for (int x = 0; x < this.wh_bit.Width; x++)

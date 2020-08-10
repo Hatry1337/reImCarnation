@@ -21,9 +21,14 @@ namespace Shmak
         public Form1()
         {
             InitializeComponent();
+            LoadedImage = (Bitmap)Image.FromFile(Settings.Default.image_path);
             update_GUI();
-        }
 
+            NotifyIcon icon = new NotifyIcon();
+            icon.ShowBalloonTip(1000, "Balloon title", "Balloon text", ToolTipIcon.Info);
+        }
+        public Bitmap LoadedImage;
+        private Thread DrawThread;
         private void update_GUI()
         {
             comboBox1.SelectedIndex = Settings.Default.draft_mode;
@@ -32,11 +37,30 @@ namespace Shmak
             textBox3.Text = Settings.Default.sensitivity.ToString();
         }
 
-        private Thread DrawThread;
+        private void button4_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog fd = new OpenFileDialog();
+            fd.Title = "Select Image";
+            fd.FileOk += dialog_ok;
+            fd.Filter = "Image Files (*.bmp; *.png; *.jpg)|*.bmp;*.png;*.jpg|All files (*.*)|*.*";
+            fd.ShowDialog();
+            void dialog_ok(object dsndr, CancelEventArgs de)
+            {
+                LoadedImage = (Bitmap)Image.FromFile(Settings.Default.image_path = fd.FileName);
+                //if (i.Size.Width > 512 || i.Size.Height > 512)
+                //{
+                //    MessageBox.Show("Картинка должна быть размером не больше 512x512px", "Error");
+                //    return;
+                //}
+                Settings.Default.image_path = fd.FileName;
+                Settings.Default.Save();
+                update_GUI();
+            }
+        }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Drafter drafter;
+            IDrafter drafter;
             switch (Settings.Default.draft_mode)
             {
                 case 0:
@@ -129,27 +153,6 @@ namespace Shmak
             if(!(int.TryParse(textBox1.Text, out num))) { return; }
             Settings.Default.wait_delay = num;
             Settings.Default.Save();
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog fd = new OpenFileDialog();
-            fd.Title = "Select Image";
-            fd.FileOk += dialog_ok;
-            fd.Filter = "Image Files (*.bmp; *.png; *.jpg)|*.bmp;*.png;*.jpg|All files (*.*)|*.*";
-            fd.ShowDialog();
-            void dialog_ok(object dsndr, CancelEventArgs de)
-            {
-                Bitmap i = (Bitmap)Image.FromFile(Settings.Default.image_path = fd.FileName);
-                if (i.Size.Width > 512 || i.Size.Height > 512)
-                {
-                    MessageBox.Show("Картинка должна быть размером не больше 512x512px", "Error");
-                    return;
-                }
-                Settings.Default.image_path = fd.FileName;
-                Settings.Default.Save();
-                update_GUI();
-            }
         }
 
         private void textBox3_TextChanged(object sender, EventArgs e)

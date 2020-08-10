@@ -13,7 +13,7 @@ using System.Windows.Forms;
 
 namespace Shmak
 {
-    public class OptimizedDrafter : Drafter
+    public class OptimizedDrafter : IDrafter
     {
         public OptimizedDrafter(int mode)
         {
@@ -48,10 +48,10 @@ namespace Shmak
 
             List<List<bool>> img_c = new List<List<bool>>();
 
-            for (int i = 0; i < img.Height; i++)
+            for (int i = 0; i < img.Width;  i++)
             {
                 img_c.Add(new List<bool>());
-                for (int j = 0; j < img.Width; j++)
+                for (int j = 0; j < img.Height; j++)
                 {
                     img_c[i].Add(false);
                 }
@@ -69,7 +69,8 @@ namespace Shmak
                 }
             }
 
-            Thread.Sleep(5000);
+
+        Thread.Sleep(5000);
             Point st_pos = Cursor.Position;
 
             while (!findPixel(img_c).IsEmpty)
@@ -113,9 +114,9 @@ namespace Shmak
         private Point findPixel(List<List<bool>> img)
         {
             Point point = new Point();
-            for (int x = 0; x < img[0].Count; x++)
+            for (int x = 0; x < img.Count; x++)
             {
-                for (int y = 0; y < img.Count; y++)
+                for (int y = 0; y < img[0].Count; y++)
                 {
                     if (img[x][y])
                     {
@@ -137,7 +138,7 @@ namespace Shmak
             switch (mode)
             {
                 case 1:
-                    if (px.X < img[0].Count - 1)
+                    if (px.X < img.Count - 1)
                     {
                         if (img[px.X + 1][px.Y])
                         {
@@ -146,7 +147,7 @@ namespace Shmak
                     }
                     break;
                 case 2:
-                    if (px.Y < img.Count - 1)
+                    if (px.Y < img[0].Count - 1)
                     {
                         if (img[px.X][px.Y + 1])
                         {
@@ -155,14 +156,14 @@ namespace Shmak
                     }
                     break;
                 case 3:
-                    if (px.X < img[0].Count - 1)
+                    if (px.X < img.Count - 1)
                     {
                         if (img[px.X + 1][px.Y])
                         {
                             return 1;
                         }
                     }
-                    if (px.Y < img.Count - 1)
+                    if (px.Y < img[0].Count - 1)
                     {
                         if (img[px.X][px.Y + 1])
                         {
@@ -171,14 +172,14 @@ namespace Shmak
                     }
                     break;
                 case 4:
-                    if (px.X < img[0].Count - 1)
+                    if (px.X < img.Count - 1)
                     {
                         if (img[px.X + 1][px.Y])
                         {
                             return 1;
                         }
                     }
-                    if (px.Y < img.Count - 1)
+                    if (px.Y < img[0].Count - 1)
                     {
                         if (img[px.X][px.Y + 1])
                         {
@@ -192,7 +193,7 @@ namespace Shmak
                             return 3;
                         }
                     }
-                    if (px.X >= 1)
+                    if (px.Y >= 1)
                     {
                         if (img[px.X][px.Y - 1])
                         {

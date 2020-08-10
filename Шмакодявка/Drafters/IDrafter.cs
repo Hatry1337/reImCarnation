@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Shmak.Drafters
 {
-    interface Drafter
+    interface IDrafter
     {
         void Draw();
     }

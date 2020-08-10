@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 namespace Shmak.Drafters
 {
-    class LineDrafter : Drafter
+    class LineDrafter : IDrafter
     {
         [DllImport("user32.dll")]
         private static extern void mouse_event(uint dwFlags, int dx, int dy, uint dwData, int dwExtraInfo);
