@@ -21,7 +21,10 @@ namespace Shmak
         public Form1()
         {
             InitializeComponent();
-            LoadedImage = (Bitmap)Image.FromFile(Settings.Default.image_path);
+            if (File.Exists(Settings.Default.image_path))
+            {
+                LoadedImage = (Bitmap)Image.FromFile(Settings.Default.image_path);
+            }
             update_GUI();
 
             NotifyIcon icon = new NotifyIcon();
@@ -65,32 +68,32 @@ namespace Shmak
             {
                 case 0:
                     drafter = new LineDrafter();
-                    DrawThread = new Thread(new ThreadStart(drafter.Draw));
+                    DrawThread = new Thread(() => drafter.Draw(LoadedImage));
                     DrawThread.Start();
                     break;
                 case 1:
                     drafter = new RandomDrafter();
-                    DrawThread = new Thread(new ThreadStart(drafter.Draw));
+                    DrawThread = new Thread(() => drafter.Draw(LoadedImage));
                     DrawThread.Start();
                     break;
                 case 2:
                     drafter = new OptimizedDrafter(1);
-                    DrawThread = new Thread(new ThreadStart(drafter.Draw));
+                    DrawThread = new Thread(() => drafter.Draw(LoadedImage));
                     DrawThread.Start();
                     break;
                 case 3:
                     drafter = new OptimizedDrafter(2);
-                    DrawThread = new Thread(new ThreadStart(drafter.Draw));
+                    DrawThread = new Thread(() => drafter.Draw(LoadedImage));
                     DrawThread.Start();
                     break;
                 case 4:
                     drafter = new OptimizedDrafter(3);
-                    DrawThread = new Thread(new ThreadStart(drafter.Draw));
+                    DrawThread = new Thread(() => drafter.Draw(LoadedImage));
                     DrawThread.Start();
                     break;
                 case 5:
                     drafter = new OptimizedDrafter(4);
-                    DrawThread = new Thread(new ThreadStart(drafter.Draw));
+                    DrawThread = new Thread(() => drafter.Draw(LoadedImage));
                     DrawThread.Start();
                     break;
             }
@@ -107,7 +110,7 @@ namespace Shmak
                     if(!(chunkedDrafter == null))
                     {
                         chunkedDrafter.Mode = 0;
-                        DrawThread = new Thread(new ThreadStart(chunkedDrafter.Draw));
+                        DrawThread = new Thread(() => chunkedDrafter.Draw(LoadedImage));
                         DrawThread.Start();
                     }
                     else
@@ -120,7 +123,7 @@ namespace Shmak
                     if (!(chunkedDrafter == null))
                     {
                         chunkedDrafter.Mode = 1;
-                        DrawThread = new Thread(new ThreadStart(chunkedDrafter.Draw));
+                        DrawThread = new Thread(() => chunkedDrafter.Draw(LoadedImage));
                         DrawThread.Start();
                     }
                     else
@@ -137,7 +140,7 @@ namespace Shmak
         private void button2_Click(object sender, EventArgs e)
         {
             chunkedDrafter = new ChunkedDrafter(0);
-            DrawThread = new Thread(new ThreadStart(chunkedDrafter.Collibrate));
+            DrawThread = new Thread(() => chunkedDrafter.Collibrate(LoadedImage));
             DrawThread.Start();
         }
 

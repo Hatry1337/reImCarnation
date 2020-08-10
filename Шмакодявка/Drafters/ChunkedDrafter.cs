@@ -42,10 +42,8 @@ namespace Shmak.Drafters
         private List<Point> ChunksPix;
         private Point ChunkCur;
 
-        public void Collibrate()
+        public void Collibrate(Bitmap img)
         {
-            if (!(File.Exists(Settings.Default.image_path))) { MessageBox.Show("Файл картинки не найден! (неверно указан путь или файл был удалён)", "Error"); return; }
-            Bitmap img = (Bitmap)Image.FromFile(Settings.Default.image_path);
             Thread.Sleep(5000);
 
             ChunkCur = Cursor.Position;
@@ -66,7 +64,7 @@ namespace Shmak.Drafters
             SystemSounds.Asterisk.Play();
         }
 
-        public void Draw()
+        public void Draw(Bitmap img)
         {
             int lng = 500;
             if (ChunksPix.Count < 500)

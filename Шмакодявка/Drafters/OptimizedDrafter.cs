@@ -41,11 +41,8 @@ namespace Shmak
         }
 
 
-        public void Draw()
+        public void Draw(Bitmap img)
         {
-            if (!(File.Exists(Settings.Default.image_path))) { MessageBox.Show("Файл картинки не найден! (неверно указан путь или файл был удалён)", "Error"); return; }
-            Bitmap img = (Bitmap)Image.FromFile(Settings.Default.image_path);
-
             List<List<bool>> img_c = new List<List<bool>>();
 
             for (int i = 0; i < img.Width;  i++)

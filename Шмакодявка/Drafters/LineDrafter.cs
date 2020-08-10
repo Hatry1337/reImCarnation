@@ -32,10 +32,8 @@ namespace Shmak.Drafters
             XDOWN = 0x00000080,
             XUP = 0x00000100
         }
-        public void Draw()
+        public void Draw(Bitmap img)
         {
-            if (!(File.Exists(Settings.Default.image_path))) { MessageBox.Show("Файл картинки не найден! (неверно указан путь или файл был удалён)", "Error"); return; }
-            Bitmap img = (Bitmap)Image.FromFile(Settings.Default.image_path);
             Thread.Sleep(5000);
 
             Point st_pos = Cursor.Position;
