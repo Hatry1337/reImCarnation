@@ -43,6 +43,29 @@ namespace Shmak
 
         public void Draw(Bitmap img)
         {
+            Thread.Sleep(5000);
+
+            Metrics metrics;
+            switch (this.Mode)
+            {
+                case 1:
+                    metrics = new Metrics("OptimizedDrafter Horizontal");
+                    break;
+                case 2:
+                    metrics = new Metrics("OptimizedDrafter Vertical");
+                    break;
+                case 3:
+                    metrics = new Metrics("OptimizedDrafter 2D");
+                    break;
+                case 4:
+                    metrics = new Metrics("OptimizedDrafter 4D");
+                    break;
+                default:
+                    metrics = new Metrics("OptimizedDrafter");
+                    break;
+            }
+            
+
             List<List<bool>> img_c = new List<List<bool>>();
 
             for (int i = 0; i < img.Width;  i++)
@@ -62,21 +85,20 @@ namespace Shmak
                     if (clr.GetBrightness() < Settings.Default.sensitivity)
                     {
                         img_c[x][y] = true;
+                        metrics.TotalPixels++;
                     }
                 }
             }
 
-
-        Thread.Sleep(5000);
             Point st_pos = Cursor.Position;
 
             while (!findPixel(img_c).IsEmpty)
             {
                 Point px = findPixel(img_c);
                 Cursor.Position = new Point(st_pos.X + px.X, st_pos.Y + px.Y);
+                metrics.MouseClicks++;
                 mouse_event((int)(MouseEventFlags.LEFTDOWN), 0, 0, 0, 0);
                 img_c[px.X][px.Y] = false;
-                Console.WriteLine($"{px.X}x{px.Y}");
                 while (toDrawExists(px, img_c, Mode) != 0)
                 {
                     switch (toDrawExists(px, img_c, Mode))
@@ -102,9 +124,15 @@ namespace Shmak
                             img_c[px.X][px.Y] = false;
                             break;
                     }
+                    metrics.PixelsDrafted++;
                 }
                 mouse_event((int)(MouseEventFlags.LEFTUP), 0, 0, 0, 0);
                 Thread.Sleep(Settings.Default.wait_delay);
+            }
+            metrics.EndTime = DateTime.Now;
+            if (Settings.Default.metrics)
+            {
+                Application.Run(new MetricsForm(metrics));
             }
         }
 

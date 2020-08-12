@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 namespace Shmak.Drafters
 {
-    class LineDrafter : IDrafter
+    public class LineDrafter : IDrafter
     {
         [DllImport("user32.dll")]
         private static extern void mouse_event(uint dwFlags, int dx, int dy, uint dwData, int dwExtraInfo);
@@ -36,6 +36,8 @@ namespace Shmak.Drafters
         {
             Thread.Sleep(5000);
 
+            Metrics metrics = new Metrics("LineDrafter");
+
             Point st_pos = Cursor.Position;
             List<Point> pixels = new List<Point>();
 
@@ -47,6 +49,7 @@ namespace Shmak.Drafters
                     if (clr.GetBrightness() < Settings.Default.sensitivity)
                     {
                         pixels.Add(new Point(x, y));
+                        metrics.TotalPixels++;
                     }
                 }
             }
@@ -55,9 +58,16 @@ namespace Shmak.Drafters
             {
                 Point px = pixels[i];
                 Cursor.Position = new Point(st_pos.X + px.X, st_pos.Y + px.Y);
+                metrics.MouseClicks++;
                 mouse_event((int)(MouseEventFlags.LEFTDOWN), 0, 0, 0, 0);
                 mouse_event((int)(MouseEventFlags.LEFTUP), 0, 0, 0, 0);
+                metrics.PixelsDrafted++;
                 Thread.Sleep(Settings.Default.wait_delay);
+            }
+            metrics.EndTime = DateTime.Now;
+            if (Settings.Default.metrics)
+            {
+                Application.Run(new MetricsForm(metrics));
             }
         }
     }

@@ -38,6 +38,7 @@ namespace Shmak
             textBox1.Text = Settings.Default.wait_delay.ToString();
             textBox2.Text = Settings.Default.image_path;
             textBox3.Text = Settings.Default.sensitivity.ToString();
+            metricsCB.Checked = Settings.Default.metrics;
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -170,6 +171,12 @@ namespace Shmak
         {
             prev pr = new prev((Bitmap)Image.FromFile(Settings.Default.image_path));
             pr.Show();
+        }
+
+        private void metricsCB_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.Default.metrics = metricsCB.Checked;
+            Settings.Default.Save();
         }
     }
 }

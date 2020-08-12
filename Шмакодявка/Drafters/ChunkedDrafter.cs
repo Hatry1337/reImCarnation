@@ -13,7 +13,7 @@ using System.Windows.Forms;
 
 namespace Shmak.Drafters
 {
-    class ChunkedDrafter : IDrafter
+    public class ChunkedDrafter : IDrafter
     {
         public ChunkedDrafter(int mode)
         {

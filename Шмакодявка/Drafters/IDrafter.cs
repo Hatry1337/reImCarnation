@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Shmak.Drafters
 {
-    interface IDrafter
+    public interface IDrafter
     {
         void Draw(Bitmap img);
     }

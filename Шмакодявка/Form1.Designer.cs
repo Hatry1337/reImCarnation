@@ -45,6 +45,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.metricsCB = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -103,6 +104,7 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.metricsCB);
             this.groupBox3.Controls.Add(this.button5);
             this.groupBox3.Controls.Add(this.label4);
             this.groupBox3.Controls.Add(this.textBox3);
@@ -115,7 +117,7 @@
             this.groupBox3.Controls.Add(this.textBox1);
             this.groupBox3.Location = new System.Drawing.Point(12, 280);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(270, 189);
+            this.groupBox3.Size = new System.Drawing.Size(270, 209);
             this.groupBox3.TabIndex = 5;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Settings";
@@ -217,19 +219,32 @@
             this.textBox1.TabIndex = 0;
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
+            // metricsCB
+            // 
+            this.metricsCB.AutoSize = true;
+            this.metricsCB.Checked = true;
+            this.metricsCB.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.metricsCB.Location = new System.Drawing.Point(10, 186);
+            this.metricsCB.Name = "metricsCB";
+            this.metricsCB.Size = new System.Drawing.Size(90, 17);
+            this.metricsCB.TabIndex = 11;
+            this.metricsCB.Text = "Show Metrics";
+            this.metricsCB.UseVisualStyleBackColor = true;
+            this.metricsCB.CheckedChanged += new System.EventHandler(this.metricsCB_CheckedChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(294, 481);
+            this.ClientSize = new System.Drawing.Size(294, 501);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximumSize = new System.Drawing.Size(310, 520);
-            this.MinimumSize = new System.Drawing.Size(310, 520);
+            this.MaximumSize = new System.Drawing.Size(310, 540);
+            this.MinimumSize = new System.Drawing.Size(310, 540);
             this.Name = "Form1";
-            this.Text = "Шмакодявка (cursor image draftman)";
+            this.Text = "Шмакодявка (cursor image drafter)";
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
@@ -256,6 +271,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.CheckBox metricsCB;
     }
 }
 
