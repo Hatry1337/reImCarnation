@@ -1,5 +1,6 @@
-﻿using Shmak.Drafters;
-using Shmak.Properties;
+﻿using reImCarnation.Drafters;
+using reImCarnation.Forms;
+using reImCarnation.Properties;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -11,7 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Shmak
+namespace reImCarnation
 {
     public class OptimizedDrafter : IDrafter
     {
@@ -43,6 +44,7 @@ namespace Shmak
 
         public void Draw(Bitmap img)
         {
+            new Thread(() => Application.Run(new IndicatorForm(img.Width, img.Height))).Start();
             Thread.Sleep(5000);
 
             Metrics metrics;
@@ -82,7 +84,7 @@ namespace Shmak
                 for (int y = 0; y < img.Height; y++)
                 {
                     Color clr = img.GetPixel(x, y);
-                    if (clr.GetBrightness() < Settings.Default.sensitivity)
+                    if (((clr.R + clr.G + clr.B) / 3) < Settings.Default.sensitivity)
                     {
                         img_c[x][y] = true;
                         metrics.TotalPixels++;
@@ -92,6 +94,18 @@ namespace Shmak
 
             Point st_pos = Cursor.Position;
 
+            DrawArray(img_c, st_pos, this.Mode, metrics);
+
+            metrics.EndTime = DateTime.Now;
+            if (Settings.Default.metrics)
+            {
+                Application.Run(new MetricsForm(metrics));
+            }
+        }
+
+
+        public static void DrawArray(List<List<bool>>  img_c, Point st_pos, int Mode, Metrics metrics)
+        {
             while (!findPixel(img_c).IsEmpty)
             {
                 Point px = findPixel(img_c);
@@ -129,14 +143,9 @@ namespace Shmak
                 mouse_event((int)(MouseEventFlags.LEFTUP), 0, 0, 0, 0);
                 Thread.Sleep(Settings.Default.wait_delay);
             }
-            metrics.EndTime = DateTime.Now;
-            if (Settings.Default.metrics)
-            {
-                Application.Run(new MetricsForm(metrics));
-            }
         }
 
-        private Point findPixel(List<List<bool>> img)
+        public static Point findPixel(List<List<bool>> img)
         {
             Point point = new Point();
             for (int x = 0; x < img.Count; x++)
@@ -158,7 +167,7 @@ namespace Shmak
             return point;
         }
 
-        private int toDrawExists(Point px, List<List<bool>> img, int mode)
+        public static int toDrawExists(Point px, List<List<bool>> img, int mode)
         {
             switch (mode)
             {

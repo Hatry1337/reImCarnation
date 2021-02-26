@@ -1,9 +1,7 @@
-﻿using reImCarnation.Forms;
-using reImCarnation.Properties;
+﻿using reImCarnation.Properties;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -13,7 +11,7 @@ using System.Windows.Forms;
 
 namespace reImCarnation.Drafters
 {
-    public class LineDrafter : IDrafter
+    public class SinDrafter : IDrafter
     {
         [DllImport("user32.dll")]
         private static extern void mouse_event(uint dwFlags, int dx, int dy, uint dwData, int dwExtraInfo);
@@ -33,43 +31,40 @@ namespace reImCarnation.Drafters
             XDOWN = 0x00000080,
             XUP = 0x00000100
         }
+
+        
+
         public void Draw(Bitmap img)
         {
-            new Thread(() => Application.Run(new IndicatorForm(img.Width, img.Height))).Start();
             Thread.Sleep(5000);
+            Point spos = new Point(Cursor.Position.X, Cursor.Position.Y);
 
-            Metrics metrics = new Metrics("LineDrafter");
-
-            Point st_pos = Cursor.Position;
-            List<Point> pixels = new List<Point>();
-
-            for (int y = 0; y < img.Height; y++)
+            mouse_event((int)(MouseEventFlags.LEFTDOWN), 0, 0, 0, 0);
+            for (int i = 0; i < 100; i++)
             {
-                for (int x = 0; x < img.Width; x++)
-                {
-                    Color clr = img.GetPixel(x, y);
-                    if (((clr.R + clr.G + clr.B) / 3) < Settings.Default.sensitivity)
-                    {
-                        pixels.Add(new Point(x, y));
-                        metrics.TotalPixels++;
-                    }
-                }
+                Cursor.Position = new Point(Cursor.Position.X + 10, Cursor.Position.Y);
+                Thread.Sleep(Settings.Default.wait_delay * 2);
             }
+            mouse_event((int)(MouseEventFlags.LEFTUP), 0, 0, 0, 0);
 
-            for (int i = 0; i < pixels.Count; i++)
+            int uMin = 0, uMax;
+
+
+
+            double degrees = 25;
+            double vel = 100;
+            double angle = Math.PI * degrees / 180.0;
+
+            Cursor.Position = new Point(spos.X, spos.Y);
+            for (double i = 0; i < 10000; i += 1)
             {
-                Point px = pixels[i];
-                Cursor.Position = new Point(st_pos.X + px.X, st_pos.Y + px.Y);
-                metrics.MouseClicks++;
+                //Math.Sin(i/128)*70)
+                double ypos = (i*Math.Tan(angle) - 9.81 * Math.Pow(i, 2)) / (2*Math.Pow(vel, 2)*Math.Pow(Math.Cos(angle), 2));
                 mouse_event((int)(MouseEventFlags.LEFTDOWN), 0, 0, 0, 0);
+                Cursor.Position = new Point((int)(spos.X + i/20), (int)(spos.Y + ypos/20));
                 mouse_event((int)(MouseEventFlags.LEFTUP), 0, 0, 0, 0);
-                metrics.PixelsDrafted++;
+
                 Thread.Sleep(Settings.Default.wait_delay);
-            }
-            metrics.EndTime = DateTime.Now;
-            if (Settings.Default.metrics)
-            {
-                Application.Run(new MetricsForm(metrics));
             }
         }
     }

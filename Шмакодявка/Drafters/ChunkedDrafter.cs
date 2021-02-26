@@ -1,4 +1,5 @@
-﻿using Shmak.Properties;
+﻿using reImCarnation.Forms;
+using reImCarnation.Properties;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -11,7 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Shmak.Drafters
+namespace reImCarnation.Drafters
 {
     public class ChunkedDrafter : IDrafter
     {
@@ -44,6 +45,7 @@ namespace Shmak.Drafters
 
         public void Collibrate(Bitmap img)
         {
+            new Thread(() => Application.Run(new IndicatorForm(img.Width, img.Height))).Start();
             Thread.Sleep(5000);
 
             ChunkCur = Cursor.Position;
@@ -54,7 +56,7 @@ namespace Shmak.Drafters
                 for (int x = 0; x < img.Width; x++)
                 {
                     Color clr = img.GetPixel(x, y);
-                    if (clr.GetBrightness() < Settings.Default.sensitivity)
+                    if (((clr.R + clr.G + clr.B) / 3) < Settings.Default.sensitivity)
                     {
                         ChunksPix.Add(new Point(x, y));
                     }
@@ -66,7 +68,7 @@ namespace Shmak.Drafters
 
         public void Draw(Bitmap img)
         {
-            int lng = 500;
+            int lng = Settings.Default.chunk_size;
             if (ChunksPix.Count < 500)
             {
                 lng = ChunksPix.Count;

@@ -11,10 +11,11 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Shmak.Drafters;
-using Shmak.Properties;
+using reImCarnation.Drafters;
+using reImCarnation.Forms;
+using reImCarnation.Properties;
 
-namespace Shmak
+namespace reImCarnation
 {
     public partial class Form1 : Form
     {
@@ -27,8 +28,8 @@ namespace Shmak
             }
             update_GUI();
 
-            NotifyIcon icon = new NotifyIcon();
-            icon.ShowBalloonTip(1000, "Balloon title", "Balloon text", ToolTipIcon.Info);
+            //NotifyIcon icon = new NotifyIcon();
+            //icon.ShowBalloonTip(1000, "Balloon title", "Balloon text", ToolTipIcon.Info);
         }
         public Bitmap LoadedImage;
         private Thread DrawThread;
@@ -51,11 +52,6 @@ namespace Shmak
             void dialog_ok(object dsndr, CancelEventArgs de)
             {
                 LoadedImage = (Bitmap)Image.FromFile(Settings.Default.image_path = fd.FileName);
-                //if (i.Size.Width > 512 || i.Size.Height > 512)
-                //{
-                //    MessageBox.Show("Картинка должна быть размером не больше 512x512px", "Error");
-                //    return;
-                //}
                 Settings.Default.image_path = fd.FileName;
                 Settings.Default.Save();
                 update_GUI();
@@ -69,37 +65,40 @@ namespace Shmak
             {
                 case 0:
                     drafter = new LineDrafter();
-                    DrawThread = new Thread(() => drafter.Draw(LoadedImage));
-                    DrawThread.Start();
                     break;
                 case 1:
                     drafter = new RandomDrafter();
-                    DrawThread = new Thread(() => drafter.Draw(LoadedImage));
-                    DrawThread.Start();
                     break;
                 case 2:
                     drafter = new OptimizedDrafter(1);
-                    DrawThread = new Thread(() => drafter.Draw(LoadedImage));
-                    DrawThread.Start();
                     break;
                 case 3:
                     drafter = new OptimizedDrafter(2);
-                    DrawThread = new Thread(() => drafter.Draw(LoadedImage));
-                    DrawThread.Start();
                     break;
                 case 4:
                     drafter = new OptimizedDrafter(3);
-                    DrawThread = new Thread(() => drafter.Draw(LoadedImage));
-                    DrawThread.Start();
                     break;
                 case 5:
                     drafter = new OptimizedDrafter(4);
-                    DrawThread = new Thread(() => drafter.Draw(LoadedImage));
-                    DrawThread.Start();
+                    break;
+                case 6:
+                    drafter = new SinDrafter();
+                    break;
+                case 7:
+                    drafter = new TanDrafter();
+                    break;
+                case 8:
+                    drafter = new SinDeformDrafter();
+                    break;
+                default:
+                    drafter = new OptimizedDrafter(1);
                     break;
             }
-
+            DrawThread = new Thread(() => drafter.Draw(LoadedImage));
+            DrawThread.Start();
         }
+        //[test] Sin Drafter
+        //[test] Tan Drafter
 
         private ChunkedDrafter chunkedDrafter;
 
@@ -178,5 +177,26 @@ namespace Shmak
             Settings.Default.metrics = metricsCB.Checked;
             Settings.Default.Save();
         }
+
+
+        public int HotKeyId { get; set; }
+
+        protected override void WndProc(ref Message m)
+        {
+            if (m.Msg == 0x0312 && m.WParam.ToInt32() == HotKeyId)
+            {
+                MessageBox.Show("WM_HOTKEY: " + m);
+            }
+            base.WndProc(ref m);
+        }
+
+        private void textBox4_TextChanged(object sender, EventArgs e)
+        {
+            int num;
+            if (!(int.TryParse(textBox4.Text, out num))) { return; }
+            Settings.Default.chunk_size = num;
+            Settings.Default.Save();
+        }
+
     }
 }

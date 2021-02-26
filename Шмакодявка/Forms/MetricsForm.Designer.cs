@@ -1,4 +1,4 @@
-﻿namespace Shmak
+﻿namespace reImCarnation
 {
     partial class MetricsForm
     {
@@ -68,7 +68,7 @@
             // 
             // notifyIcon1
             // 
-            this.notifyIcon1.BalloonTipTitle = "Шмакодявка";
+            this.notifyIcon1.BalloonTipTitle = "reImCarnation";
             this.notifyIcon1.Text = "notifyIcon1";
             this.notifyIcon1.Visible = true;
             // 
@@ -84,7 +84,7 @@
             this.MaximumSize = new System.Drawing.Size(400, 400);
             this.MinimumSize = new System.Drawing.Size(400, 400);
             this.Name = "MetricsForm";
-            this.Text = "Шмакодявка - Метрика";
+            this.Text = "reImCarnation - Метрика";
             this.ResumeLayout(false);
 
         }

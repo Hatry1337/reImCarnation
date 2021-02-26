@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29806.167
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Шмакодявка", "Шмакодявка\Шмакодявка.csproj", "{F4B2885D-F68C-4F26-B04C-D0A70CE79679}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "reImCarnation", "Шмакодявка\reImCarnation.csproj", "{F4B2885D-F68C-4F26-B04C-D0A70CE79679}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

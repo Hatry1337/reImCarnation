@@ -3,7 +3,6 @@ using reImCarnation.Properties;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -13,7 +12,7 @@ using System.Windows.Forms;
 
 namespace reImCarnation.Drafters
 {
-    public class RandomDrafter : IDrafter
+    class SinDeformDrafter : IDrafter
     {
         [DllImport("user32.dll")]
         private static extern void mouse_event(uint dwFlags, int dx, int dy, uint dwData, int dwExtraInfo);
@@ -33,48 +32,47 @@ namespace reImCarnation.Drafters
             XDOWN = 0x00000080,
             XUP = 0x00000100
         }
+
         public void Draw(Bitmap img)
         {
             new Thread(() => Application.Run(new IndicatorForm(img.Width, img.Height))).Start();
             Thread.Sleep(5000);
 
-            Metrics metrics = new Metrics("RandomDrafter");
+            Metrics metrics = new Metrics("SinDeform");
 
-            Point st_pos = Cursor.Position;
-            List<Point> pixels = new List<Point>();
+            List<List<bool>> img_c = new List<List<bool>>();
 
-            for (int y = 0; y < img.Height; y++)
+            for (int i = 0; i < img.Width; i++)
             {
-                for (int x = 0; x < img.Width; x++)
+                img_c.Add(new List<bool>());
+                for (int j = 0; j < img.Height; j++)
+                {
+                    img_c[i].Add(false);
+                }
+            }
+
+            int rx;
+            for (int x = 0; x < img.Width; x++)
+            {
+                for (int y = 0; y < img.Height; y++)
                 {
                     Color clr = img.GetPixel(x, y);
                     if (((clr.R + clr.G + clr.B) / 3) < Settings.Default.sensitivity)
                     {
-                        pixels.Add(new Point(x, y));
+                        rx = (int)Math.Round(x+Math.Sin(y/10)*4);
+                        if (rx < img.Width && rx >= 0)
+                        {
+                            img_c[rx][y] = true;
+                        }
                         metrics.TotalPixels++;
                     }
                 }
             }
 
-            Random rand = new Random();
-            for (int i = pixels.Count - 1; i >= 1; i--)
-            {
-                int j = rand.Next(i + 1);
-                var temp = pixels[j];
-                pixels[j] = pixels[i];
-                pixels[i] = temp;
-            }
+            Point st_pos = Cursor.Position;
 
-            for (int i = 0; i < pixels.Count; i++)
-            {
-                Point px = pixels[i];
-                Cursor.Position = new Point(st_pos.X + px.X, st_pos.Y + px.Y);
-                metrics.MouseClicks++;
-                mouse_event((int)(MouseEventFlags.LEFTDOWN), 0, 0, 0, 0);
-                mouse_event((int)(MouseEventFlags.LEFTUP), 0, 0, 0, 0);
-                metrics.PixelsDrafted++;
-                Thread.Sleep(Settings.Default.wait_delay);
-            }
+            OptimizedDrafter.DrawArray(img_c, st_pos, 1, metrics);
+
             metrics.EndTime = DateTime.Now;
             if (Settings.Default.metrics)
             {

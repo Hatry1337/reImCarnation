@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Shmak
+namespace reImCarnation
 {
     static class Program
     {
@@ -16,7 +16,16 @@ namespace Shmak
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            using (var f1 = new Form1())
+            {
+                f1.HotKeyId = 0x32;
+                f1.FormClosed += (s, e) => {
+                    Hotkey.Unregister(f1, f1.HotKeyId);
+                };
+
+                Hotkey.Register(f1, f1.HotKeyId, Modifiers.ALT, Keys.F3);
+                Application.Run(f1);
+            }
         }
     }
 }

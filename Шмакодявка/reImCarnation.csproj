@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{F4B2885D-F68C-4F26-B04C-D0A70CE79679}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Shmak</RootNamespace>
-    <AssemblyName>Шмакодявка</AssemblyName>
+    <RootNamespace>reImCarnation</RootNamespace>
+    <AssemblyName>reImCarnation</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -22,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -31,6 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>icon.ico</ApplicationIcon>
@@ -47,41 +49,59 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Drafters\ChunkedDrafter.cs" />
     <Compile Include="Drafters\IDrafter.cs" />
     <Compile Include="Drafters\LineDrafter.cs" />
     <Compile Include="Drafters\RandomDrafter.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="Drafters\SinDeformDrafter.cs" />
+    <Compile Include="Drafters\TanDrafter.cs" />
+    <Compile Include="Drafters\SinDrafter.cs" />
+    <Compile Include="Draw.cs" />
+    <Compile Include="Forms\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
+    <Compile Include="Forms\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Drafters\OptimizedDrafter.cs" />
-    <Compile Include="Metrics.cs" />
-    <Compile Include="MetricsForm.cs">
+    <Compile Include="Forms\IndicatorForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MetricsForm.Designer.cs">
+    <Compile Include="Forms\IndicatorForm.Designer.cs">
+      <DependentUpon>IndicatorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="funcDrafter.cs" />
+    <Compile Include="Hotkey.cs" />
+    <Compile Include="Metrics.cs" />
+    <Compile Include="Forms\MetricsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MetricsForm.Designer.cs">
       <DependentUpon>MetricsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="prev.cs">
+    <Compile Include="Forms\prev.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="prev.Designer.cs">
+    <Compile Include="Forms\prev.Designer.cs">
       <DependentUpon>prev.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Form1.resx">
+    <Compile Include="Rgb.cs" />
+    <EmbeddedResource Include="Forms\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="MetricsForm.resx">
+    <EmbeddedResource Include="Forms\IndicatorForm.resx">
+      <DependentUpon>IndicatorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MetricsForm.resx">
       <DependentUpon>MetricsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="prev.resx">
+    <EmbeddedResource Include="Forms\prev.resx">
       <DependentUpon>prev.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
