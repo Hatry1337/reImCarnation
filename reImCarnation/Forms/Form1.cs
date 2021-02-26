@@ -82,14 +82,15 @@ namespace reImCarnation
                     drafter = new OptimizedDrafter(4);
                     break;
                 case 6:
-                    drafter = new SinDrafter();
-                    break;
-                case 7:
-                    drafter = new TanDrafter();
-                    break;
-                case 8:
                     drafter = new SinDeformDrafter();
                     break;
+                case 7:
+                    drafter = new SinDrafter();
+                    break;
+                case 8:
+                    drafter = new TanDrafter();
+                    break;
+                
                 default:
                     drafter = new OptimizedDrafter(1);
                     break;

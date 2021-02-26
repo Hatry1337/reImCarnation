@@ -59,7 +59,7 @@ namespace reImCarnation.Drafters
                     Color clr = img.GetPixel(x, y);
                     if (((clr.R + clr.G + clr.B) / 3) < Settings.Default.sensitivity)
                     {
-                        rx = (int)Math.Round(x+Math.Sin(y/10)*4);
+                        rx = (int)Math.Round(x+Math.Sin(y/10)*8);
                         if (rx < img.Width && rx >= 0)
                         {
                             img_c[rx][y] = true;
