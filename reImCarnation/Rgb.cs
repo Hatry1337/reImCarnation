@@ -269,5 +269,37 @@ namespace reImCarnation
                 return 255;
             return (byte)x;
         }
+
+ 
+        public static byte[,,] Convolution(byte[,,] rgb, double[,] matrix)
+        {
+            int w = matrix.GetLength(0);
+            int h = matrix.GetLength(1);
+
+            int width = rgb.GetLength(2);
+            int height = rgb.GetLength(1);
+
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    double r = 0d, g = 0d, b = 0d;
+
+                    for (int i = 0; i < w; i++)
+                    {
+                        for (int j = 0; j < h; j++)
+                        {
+                            r += matrix[j, i] * rgb[0, y, x];
+                            g += matrix[j, i] * rgb[1, y, x];
+                            b += matrix[j, i] * rgb[2, y, x];
+                        }
+                    }
+                    rgb[0, y, x] = (byte)r;
+                    rgb[1, y, x] = (byte)g;
+                    rgb[2, y, x] = (byte)b;
+                }
+            }
+            return rgb;
+        }
     }
 }

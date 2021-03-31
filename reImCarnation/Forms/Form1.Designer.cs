@@ -69,7 +69,7 @@
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(258, 44);
             this.button2.TabIndex = 1;
-            this.button2.Text = "Colibrate";
+            this.button2.Text = "Calibrate";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
@@ -234,11 +234,11 @@
             this.comboBox1.Items.AddRange(new object[] {
             "Line Mode",
             "Random Mode",
-            "Optimized Mode Horizontal",
-            "Optimized Mode Vertical",
-            "[unstable] Optimized 2D",
-            "[unstable] Optimized 4D",
-            "[test] Sin Deform Drafter"});
+            "Optimized Horizontal Mode",
+            "Optimized Vertical Mode",
+            "Optimized 2D Mode",
+            "Optimized 4D Mode",
+            "Sin Deform Mode"});
             this.comboBox1.Location = new System.Drawing.Point(6, 41);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(173, 21);

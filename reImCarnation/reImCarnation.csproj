@@ -55,6 +55,7 @@
     <Compile Include="Drafters\ChunkedDrafter.cs" />
     <Compile Include="Drafters\IDrafter.cs" />
     <Compile Include="Drafters\LineDrafter.cs" />
+    <Compile Include="Drafters\OutlineSelDrafter.cs" />
     <Compile Include="Drafters\RandomDrafter.cs" />
     <Compile Include="Drafters\SinDeformDrafter.cs" />
     <Compile Include="Drafters\TanDrafter.cs" />

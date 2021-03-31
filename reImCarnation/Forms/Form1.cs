@@ -85,9 +85,12 @@ namespace reImCarnation
                     drafter = new SinDeformDrafter();
                     break;
                 case 7:
-                    drafter = new SinDrafter();
+                    drafter = new OutlineSelDrafter();
                     break;
                 case 8:
+                    drafter = new SinDrafter();
+                    break;
+                case 9:
                     drafter = new TanDrafter();
                     break;
                 
@@ -100,6 +103,7 @@ namespace reImCarnation
         }
         //[test] Sin Drafter
         //[test] Tan Drafter
+        //OutlineSel Mode
 
         private ChunkedDrafter chunkedDrafter;
 
@@ -169,6 +173,16 @@ namespace reImCarnation
 
         private void button5_Click(object sender, EventArgs e)
         {
+            if (Settings.Default.image_path == null)
+            {
+                MessageBox.Show("The path to the source image is not specified.", "Error");
+                return;
+            }
+            if (!File.Exists(Settings.Default.image_path))
+            {
+                MessageBox.Show("The specified source image does not exist.", "Error");
+                return;
+            }
             prev pr = new prev((Bitmap)Image.FromFile(Settings.Default.image_path));
             pr.Show();
         }

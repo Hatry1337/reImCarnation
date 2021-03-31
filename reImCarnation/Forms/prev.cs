@@ -35,6 +35,17 @@ namespace reImCarnation
 
         private void draw_img()
         {
+            switch (Settings.Default.draft_mode)
+            {
+                case 7:
+                    double[,] kernel = new double[,]
+                     {{0.1, 0.1, 0.1},
+                      {0.1, 0.1, 0.1},
+                      {0.1, 0.1, 0.1}};
+                    in_arr = Rgb.Convolution(in_arr, kernel);
+                    break;
+            }
+
             for (int y = 0; y < this.image.Height; y++)
             {
                 for (int x = 0; x < this.image.Width; x++)
@@ -114,10 +125,8 @@ namespace reImCarnation
 
         private void radioButton2_CheckedChanged(object sender, EventArgs e)
         {
-            Console.WriteLine("GG1");
             if (radioButton2.Checked)
             {
-                Console.WriteLine("GG2");
                 this.image = (Bitmap)resizeImage(this.orig, new Size(512, 512));
                 this.in_arr = Rgb.BitmapToByteRgbQ(this.image);
                 this.out_arr = new byte[3, this.image.Height, this.image.Width];
